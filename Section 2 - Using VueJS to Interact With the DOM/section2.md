@@ -199,3 +199,7 @@ But if we do want to output an HTML element and we know it is from a safe source
 We should still use it very carefully, as it does expose our site to cross-site script attack, if we will let our users to input the content for example.
 
 ## Optional: Assignemt Starting Code (Section 2, lecture 16)
+
+<!-- See the Exercise1 folder -->
+
+##

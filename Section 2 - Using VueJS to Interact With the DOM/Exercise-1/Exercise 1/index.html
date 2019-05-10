@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Exercise</title>
+</head>
+
+<body>
+    <div id="exercise">
+        <!-- 1) Fill the <p> below with your Name and Age - using Interpolation -->
+        <p>VueJS is pretty cool - {{ name }} - {{ age }}</p>
+        <!-- 2) Output your age, multiplied by 3 -->
+        <p>{{ multiplyAge() }}</p>
+        <!-- 3) Call a function to output a random float between 0 and 1 (Math.random()) -->
+        <p>{{ randomFloat() }}</p>
+        <!-- 4) Search any image on Google and output it here by binding the "src" attribute -->
+        <div>
+            <img style="width:100px;height:100px" :src="link">
+        </div>
+        <!-- 5) Pre-Populate this input with your name (set the "value" attribute) -->
+        <div>
+            <input type="text" :value="name">
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#exercise',
+            data: {
+                name: 'Eliad',
+                age: 27,
+                link: 'https://images-eds-ssl.xboxlive.com/image?url=8Oaj9Ryq1G1_p3lLnXlsaZgGzAie6Mnu24_PawYuDYIoH77pJ.X5Z.MqQPibUVTcuEgPvjEZKly4WA4TAKGDQzVauJbxbRAyL3UZVASj8B4czCzQhkg7MbwryPa3CAf5.a0g6BC8N.zr76GA16p9rPhKZ_He1WWfLBhzazkOQrdMUzknBehAXBgBa6UfWlJCROVDMaww5s130icB1XxZVmJjayEdR8eV0tp9Kve.AYg-&h=300&w=200&format=jpg',
+            },
+            methods: {
+                multiplyAge() {
+                    return `The multiplied age is: ${this.age * 3}`;
+                },
+
+                randomFloat() {
+                    return Math.random().toFixed(1);
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
