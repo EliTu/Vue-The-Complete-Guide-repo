@@ -111,3 +111,91 @@ Now we can get 'Hi Vue!' displayed on the page, but this time by getting the fun
 ```
 
 ## Binding to Attributes (Section 2, lecture 12)
+
+Let's say we have a link property inside `data`, and it is a link to google.com. We would like to append it to our template, and naturally we would do that with an `<a>` tag. Inside the `href` attribute, we might think we should pass the link within interpolation string `{{}}`, but this will not work.
+
+```js
+    <div id="app">
+            <p>{{ sayHello() }} - <a href={{ link }}>Google</a></p>
+    </div>
+```
+
+By clicking on the link, we will be directed to a site that has '{{}}` in its domain, basically parsing the curly braces in the URL, which is clearly wrong. The reason is that **the Vue string interpolation cannot be used within any HTML element attribute**, only in places where we would normally show text, not HTML elements.
+
+### Bind Directives with `v-bind`
+
+But we still want to bind this link dynamically with out Vue instance, so how will we do that? we will use Directives to bind the link dynamically with `v-bind`. This directive tells Vue to not use t he normal attribute like a normal HTML attribute, but it should bind it. We do this by adding `v-bind`, followed by a ':' which assigns an argument to the `v-bind`, and then passing the argument, which is the attribute we want to bind, in our case the `href`. What we'll pass in the value of the `v-bind:href` attribute is simply `link`, between quotation marks (""), not interpolation ({{}}).
+
+```js
+    <div id="app">
+        <p>{{ sayHello() }} - <a v-bind:href="link">Google</a></p>
+    </div>
+```
+
+In turn, the `href` attribute is now bound to the Vue instance and can access the `link` property dynamically, thanks to the directive.
+
+## Understanding and Using Directives (Section 2, lecture 13)
+
+What is a directive? it's basically an 'instruction' we put in our code. Vue is basically shipped with a few built in directives, like the `v-bind`, and later we will see that we can also set custom directives by ourselves.
+
+In the example we just saw, the `v-bind` is an instruction that tells Vue to bind something to our data in the Vue instance, and is used in cases where we can't really use the string interpolation to access the data in the instance.
+
+Each directive takes an argument, which is passed using a colon, and the value of what should be passed inside of quotation marks: `v-(directiveName):(argument)="(value)"`. This allows us to pass dynamic data to HTML elements, something we otherwise have no option to do.
+
+## Disable Re-rendering with `v-once`
+
+Lets say we have an `<h1>` title, and inside we will pass our `title` property.
+
+```js
+<h1>{{ title }}</h1>
+```
+
+Simultaneously, we will go back to the `sayHello` method and mutate `title` by assigning `this.title` to something else.
+
+```js
+  methods: {
+                sayHello() {
+                    this.title = 'Hello';
+                    return this.title;
+                }
+            }
+```
+
+If we wil now run the code, we will see 'Hello' being printed twice, once in the `<h1>` element, and once in the `<p>` element, where we pass `{{ title }}` in both of these tags, and that is because we're setting the value of `title` in the `sayHello` method.
+
+But what if we really wanted to stick to the original title and output it in the `<h1>` tag, while also mutating the value of `title` to 'Hello' like we did? We can do just that with the `v-once` directive, that comes by default with Vue. We pass it into an HTML element hat holds an interpolation, like we have with `<h1>`. By adding this to an element, all the content inside of it will only be rendered once, and won't changed again when the `sayHello` method is being called and mutate the value of `title`.
+
+```js
+<h1 v-once>{{ title }}</h1>
+```
+
+## How to output Raw HTML - `v-html` (Section 2, lecture 15)
+
+We'll look at another cool Vue feature. Lets create a property named `finishedLink`, and unlike the `link`, this will take the full HTML markup as the value.
+
+```js
+data: {
+    title: 'Hi Vue!!',
+    bool: true,
+    link: 'http://google.com',
+    finishedLink: '<a href="http://google.com">Google</a>'
+    },
+```
+
+Now we will create another `<p>` tag, and we would like to pass in the `finishedLink` property in it, if we will try to do this with string interpolation, we will just output the value as raw text to the UI, and not a parsed HTML element.
+
+```js
+<p>{{ finishedLink }}</p> // -> '<a href="http://google.com">Google</a>'
+```
+
+Why does the link is not being displayed like it did with the `link` property? This is the default behavior of Vue and it is done to prevent cross-site script injection attacks by a third party. **By default, Vue escapes HTML and does not render it, but renders text**, which is what we would want most of the time.
+
+But if we do want to output an HTML element and we know it is from a safe source and cannot host a malicious script, we could render HTML code with the `v-html` directive. We will get rid of the interpolation, and inside the attribute pass `v-html`, without an argument, and the value will be the property that holds the raw HTML.
+
+```js
+<p v-html="finishedLink" /> // -> Google (With the link)
+```
+
+We should still use it very carefully, as it does expose our site to cross-site script attack, if we will let our users to input the content for example.
+
+## Optional: Assignemt Starting Code (Section 2, lecture 16)
