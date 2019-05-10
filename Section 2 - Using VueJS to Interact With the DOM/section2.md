@@ -1,4 +1,3 @@
-<!-- markdownlint-disable MD010 -->
 # Section 2 - Using VueJS To Interact with the DOM
 
 ## Understanding VueJS Templates (Section 2, lecture 9)
@@ -87,3 +86,28 @@ We can go to the `<p>` and inside the `{{}}` simply pass `sayHello()` to call th
 We do need to note, that if we pass a method in our HTML with Vue, what should be returned and eventually displayed is a type of `string`, which is something that the DOM can present. Another important thing to note, is that we access the `sayHello` function straightforwardly, without any mentions that it belongs to the `methods` object or anything, just like we did with `title`.
 
 ## Accessing Data in the Vue Instance (Section 2, lecture 11)
+
+In our Vue instance, if we wanted to output `title` in our `sayHello` function, so that the function instead of returning `Hello!` would just return whatever was pass in the `title` in the `data` object. If we would just `return` the `title`, this won't work, because unlike the HTML template, where we do have access to all the objects and properties thanks to the proxying the Vue does for us, in the Vue instacne, the JavaScript code, it is not so.
+
+But we still have a way, and a relatively simple one, to access out `data` properties inside our methods. The `title` property sits inside the `data` object, and normally we won't be able to access it by calling `this.title`, because `this` will not refer to the `data` object. But Vue provides us some "magic" by proxying these properties in a way, that if we call `this` anywhere inside the Vue instance object, we will get an access to the properties or methods we need. Behind the scenes, Vue creates a rather easy access to these properties (We will discuss this in detail later when we'll talk about the Vue instance in detail).
+
+Now we can get 'Hi Vue!' displayed on the page, but this time by getting the function to access the `title` property and return it.
+
+```js
+<script>
+        new Vue({
+            el: '#app',
+            data: {
+                title: 'Hi Vue!',
+                bool: true,
+            },
+            methods: {
+                sayHello: function () {
+                    return this.title;
+                }
+            }
+        });
+</script>
+```
+
+## Binding to Attributes (Section 2, lecture 12)

@@ -5,25 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="./vue.js"></script>
     <title>Section 2</title>
 </head>
 
 <body>
     <div id="app">
-        <p>{{ sayHello() }}</p>
+        <p>{{ sayHello() }} - <a v-bind:href="link">Google</a></p>
     </div>
 
+    <script src="./vue.js"></script>
     <script>
         new Vue({
             el: '#app',
             data: {
-                title: 'Hi Vue!',
+                title: 'Hi Vue!!',
                 bool: true,
+                link: 'http://google.com'
             },
             methods: {
-                sayHello: function () {
-                    return 'Hello!';
+                sayHello() {
+                    return this.title;
                 }
             }
         });
