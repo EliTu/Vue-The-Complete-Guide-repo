@@ -202,4 +202,57 @@ We should still use it very carefully, as it does expose our site to cross-site 
 
 <!-- See the Exercise1 folder -->
 
-##
+## Listening to Evenets (Section 2, lecture 17)
+
+Another thing that we could do with the directives is to directly listen for events on the HTML tags, with the syntax of `v-on:(eventName)="(callbackFunction)"`. There is also a shorthand for this with the `@` notation, it'll look like `@(eventName)="(callbackFunction)". Basically it is the opposite of the`v-bind` directive: instead of passing someone to the attribute, we want to "receive" something from it, which is an event.
+
+We can use the `v-on` or `@` and pass many kind of events we would like to listen to: clicks, mouseon, mouseoff, scroll, load etc.
+
+We would create a `<button>` and another `<p>` tag, which inside of it will hold the property of `counter`, initially set to 0. We would like to listen to a click on the button, and upon a click increment the counter by one, by calling a callback function.
+
+```js
+    <button type="button" @click="increase">Click</button>
+    <p>{{ counter }}</p>
+
+     new Vue({
+            el: '#app',
+            data: {
+                counter: 0
+            },
+            methods: {
+                increase() {
+                    this.counter++;
+                }
+            }
+        });
+```
+
+Now upon a click, the counter will be increased by 1. This is a great and fast replacement for writing JavaScript `addEventListener` to create a faster way to listen to events.
+
+## Getting Event Data from the Event Object (Section 2, lecture 18)
+
+Another thing that is important to remember with events in Vue is that vue `v-on` directives set us the `event` object that is created by the JavaScript runtime automatically, and we can access it through the callback function arguments. Whenever a `v-on` directive is passed, we could access that event object and all its properties and data that it stores, giving us a greater ability to manipulate event data.
+
+For this example, we will create another `<p>` tag, and we would like to listen to a `mouseover` event on it, and pass on the X and Y coordinates whenever we our mouse is passing over it, updating `x` and `y` properties we pass in the `data` object. For that, we will create a callback function that takes the event object as an argument, named `e`, and then sets `x` and `y` as the `e.clientX` and `e.clientY`, which hold the data of the X and Y coordinates of the mouse.
+
+```js
+<p @mousemove="getCoordinates">Coordinates: {{ x }} | {{ y }}</p>
+
+  new Vue({
+            el: '#app',
+            data: {
+                x: 0,
+                y: 0
+            },
+            methods: {
+                getCoordinates(e) {
+                    this.x = e.clientX;
+                    this.y = e.clientY;
+                }
+            }
+        });
+```
+
+Whenever we move the mouse over the `<p>` tag that holds the `@mouseover` directive, the `x` and `y` values will dynamically change and will also be dynamically dipslayed on the UI, since we pass them in the interpolation.
+
+## Passing your own Arguments with Events (Section 2, lecture 19)
