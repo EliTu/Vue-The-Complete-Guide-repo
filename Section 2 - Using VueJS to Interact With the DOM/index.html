@@ -15,7 +15,7 @@
         <hr>
         <p v-html="finishedLink"></p>
         <hr>
-        <button type="button" @click="increase">Click</button>
+        <button type="button" @click="increase(2, $event)">Click</button>
         <p>{{ counter }}</p>
         <p @mousemove="getCoordinates">Coordinates: {{ x }} | {{ y }}</p>
     </div>
@@ -38,11 +38,11 @@
                     this.title = 'Hello';
                     return this.title;
                 },
-                increase() {
-                    this.counter++;
+                increase(step, e) {
+                    console.log(e);
+                    this.counter += step;
                 },
                 getCoordinates(e) {
-                    console.log(e);
                     this.x = e.clientX;
                     this.y = e.clientY;
                 }

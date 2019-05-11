@@ -256,3 +256,52 @@ For this example, we will create another `<p>` tag, and we would like to listen 
 Whenever we move the mouse over the `<p>` tag that holds the `@mouseover` directive, the `x` and `y` values will dynamically change and will also be dynamically dipslayed on the UI, since we pass them in the interpolation.
 
 ## Passing your own Arguments with Events (Section 2, lecture 19)
+
+What if we wanted to pass our own argument? Meaning, pass on an argument to the callback function which we then can use in the callback function. Lets take the `counter` example - what if we wanted to pass on ana argument that will be a step that we can use in the `increase` method to increase the counter? We can do that easily with Vue.
+
+We simply pass it in parantheses at the callback function in the HTML tag, inside inputing the the argument, which then we can pass on at the callback function and use.
+
+```js
+   <button type="button" @click="increase(2)">Click</button>
+    <p>{{ counter }}</p>
+
+       new Vue({
+            el: '#app',
+            data: {
+                counter: 0,
+            },
+            methods: {
+                increase(step) {
+                    this.counter += step;
+                }
+            }
+        });
+```
+
+We pass on `step` as our parameter at the `increase` callback function, set it as the increase amount, and pass 2 as our argument in the directive function call itself. Now every time we click on the button, the counter will be increased by 2.
+
+### Passing the `event` object as an argument
+
+We could also set to pass the `event` object as an argument of the callback function. We could do that, but we need to pay attention to the name we pass - Vue fetches and stores this argument for us, and we indicate it with `$event` at the arguments we pass in the event listener directive callback function. Back in the function itself, we could simply pass it as `e` like we done before.
+
+`$event` is a protected name in Vue, and it is necessary to be passed as such to get access to that event as an argument of the callback function.
+
+```js
+   <button type="button" @click="increase(2, $event)">Click</button>
+    <p>{{ counter }}</p>
+
+       new Vue({
+            el: '#app',
+            data: {
+                counter: 0,
+            },
+            methods: {
+                increase(step, e) {
+                    console.log(e);
+                    this.counter += step;
+                }
+            }
+        });
+```
+
+## Modifying Events - with Event Modifiers (Section 2, lecture 20)
