@@ -163,7 +163,7 @@ Simultaneously, we will go back to the `sayHello` method and mutate `title` by a
 
 If we wil now run the code, we will see 'Hello' being printed twice, once in the `<h1>` element, and once in the `<p>` element, where we pass `{{ title }}` in both of these tags, and that is because we're setting the value of `title` in the `sayHello` method.
 
-But what if we really wanted to stick to the original title and output it in the `<h1>` tag, while also mutating the value of `title` to 'Hello' like we did? We can do just that with the `v-once` directive, that comes by default with Vue. We pass it into an HTML element hat holds an interpolation, like we have with `<h1>`. By adding this to an element, all the content inside of it will only be rendered once, and won't changed again when the `sayHello` method is being called and mutate the value of `title`.
+But what if we really wanted to stick to the original title and output it in the `<h1>` tag, while also mutating the value of `title` to 'Hello' like we did? We can do just that with the `v-once` directive, that comes by default with Vue. We pass it into an HTML element that holds an interpolation, like we have with `<h1>`. By adding this to an element, all the content inside of it will only be rendered once, and won't changed again when the `sayHello` method is being called and mutate the value of `title`.
 
 ```js
 <h1 v-once>{{ title }}</h1>
@@ -363,7 +363,7 @@ To modify the `<span>` tag directive to stop listening to the coordinates, we co
 
 This negates the need to write an extra callback function, and is a better practice than just leaving the value empty by itself. the `.stop` is basically like an "intermidtate" Vue function that does the job for us, it stops the propagation.
 
-Another important modifier that we can encounter a lot is `.prevent`, which runs `preventDefault()` functions to stop the default behavior, usually paired together with buttons to prevent page reload upon a click.
+Another important modifier that we can encounter a lot is `.prevent`, which runs `preventDefault()` functions to stop the default behavior, usually paired together with submit buttons to prevent page reload upon a click.
 
 Another thing that we can do is to chain modifiers, for example
 
@@ -374,3 +374,45 @@ Another thing that we can do is to chain modifiers, for example
 ```
 
 ## Listening to Keyboard Events (Section 2, lecture 21)
+
+Like we specific modifiers for various events, we also have modifiers for keyboard keys, meaning that we can modify an event listener to listen to specific keys being pressed, like enter, space, delete, key-up etc...
+
+The way that it is done is by first to pass on an event that listens to key strokes, and then we could modify it by passing the specific key we're interested in.
+
+For example, we have a text input field, and whenever a key is being pressed, a callback function is called that will alert a message.
+
+```js
+ <input type="text" @keyup="alertMe">
+
+  new Vue({
+            el: '#app',
+            data: {
+
+            },
+            methods: {
+                alertMe() {
+                    alert('Alert');
+                }
+            }
+        });
+```
+
+The problem now is that we will have an alert popup every time any key is pressed, and that is too much. In this case, we could use modifiers to indicate a specific key to be pressed in order to create the alert, like the enter key for example. We could indicate it easily and fast using the event modifiers, by simply passing `.enter` to the directive.
+
+```js
+<input type="text" @keyup.enter="alertMe">
+```
+
+Now the alert will popup only if we will press the enter key, and will ignore it on any other key press.
+
+Another thing that we could do with the modifiers, as we know, is to chain up key modifiers, that way we could easily specify multiple keys to be listened to.
+
+```js
+<input type="text" @keyup.enter.space.delete="alertMe">
+```
+
+Now the alert will pop up upon pressing enter, space and the delete button.
+
+## Exercise 2
+
+<!-- See Exercise2 folder -->
