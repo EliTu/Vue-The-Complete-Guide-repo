@@ -17,7 +17,11 @@
         <hr>
         <button type="button" @click="increase(2, $event)">Click</button>
         <p>{{ counter }}</p>
-        <p @mousemove="getCoordinates">Coordinates: {{ x }} | {{ y }}</p>
+        <p @mousemove="getCoordinates">Coordinates: {{ x }} | {{ y }}
+            <span @mousemove.stop=""> (( DEAD ZONE ))</span>
+        </p>
+        <hr>
+        <input type="text" @keyup.enter.space.delete="alertMe">
     </div>
 
     <script src="./vue.js"></script>
@@ -45,6 +49,9 @@
                 getCoordinates(e) {
                     this.x = e.clientX;
                     this.y = e.clientY;
+                },
+                alertMe() {
+                    alert('Alert');
                 }
             }
         });

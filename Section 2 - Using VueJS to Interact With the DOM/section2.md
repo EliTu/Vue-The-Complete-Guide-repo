@@ -305,3 +305,72 @@ We could also set to pass the `event` object as an argument of the callback func
 ```
 
 ## Modifying Events - with Event Modifiers (Section 2, lecture 20)
+
+Sometimes, events gives us few cases that we will need to solve, and Vue makes it easy for us to modify events according to our needs.
+
+Lets go back to the `<p>` tag that displays the `x` and `y` coordinates, and add a `<span>` to it which we would like to act as a "dead-zone", meaning whenever we will hover our mouse on to him we will not receive the coordinate values of `x` and `y`.
+
+```js
+ <p @mousemove="getCoordinates">Coordinates: {{ x }} | {{ y }}
+    <span> DEAD ZONE </span>
+ </p>
+```
+
+If we will just put it as is, we will still get the coordinates because it is part of the `<p>` tag that listens to the `mousemove` event. And so, we would like to create another event listener for the `<span>` which will also listen to the `mousemove` event, but this time we will modify it.
+
+To modify the `<span>` tag directive to stop listening to the coordinates, we could approach this in couple of ways:
+
+-   **Return empty value** - Simply pass on an empty value.
+
+```js
+ <p @mousemove="getCoordinates">Coordinates: {{ x }} | {{ y }}
+            <span @mousemove=""> (( DEAD ZONE ))</span>
+        </p>
+```
+
+-   **callback function with `stopPropagation()`** - Exectue a callback function that uses the `event` object, and executes `e.stopPropagation()` method, which basically stops the event from being propagated to the element that holds it.
+
+```js
+ <p @mousemove="getCoordinates">Coordinates: {{ x }} | {{ y }}
+    <span @mousemove=""> (( DEAD ZONE ))</span>
+ </p>
+
+ new Vue({
+            el: '#app',
+            data: {
+                x: 0,
+                y: 0
+            },
+            methods: {
+                getCoordinates(e) {
+                    this.x = e.clientX;
+                    this.y = e.clientY;
+                },
+                preventMouse(e) {
+                    e.stopPropagation();
+                }
+            }
+        });
+```
+
+-   **Vue event modifiers** - Instead of calling a callback function on that element, we can leave the value empty and use event modifiers that allows us to modify the behavior of the selected event. There are several event modifiers that comes with Vue (Full list at the lecture resources), but in our case we can use the `stop` modifier to achieve our goal, by simply passing it after the event with the dot notation, like this: `@mouseover.stop=""`.
+
+```js
+  <p @mousemove="getCoordinates">Coordinates: {{ x }} | {{ y }}
+        <span @mousemove.stop=""> (( DEAD ZONE ))</span>
+  </p>
+```
+
+This negates the need to write an extra callback function, and is a better practice than just leaving the value empty by itself. the `.stop` is basically like an "intermidtate" Vue function that does the job for us, it stops the propagation.
+
+Another important modifier that we can encounter a lot is `.prevent`, which runs `preventDefault()` functions to stop the default behavior, usually paired together with buttons to prevent page reload upon a click.
+
+Another thing that we can do is to chain modifiers, for example
+
+```js
+  <p @mousemove="getCoordinates">Coordinates: {{ x }} | {{ y }}
+        <span @mousemove.stop.prevent=""> (( DEAD ZONE ))</span>
+  </p>
+```
+
+## Listening to Keyboard Events (Section 2, lecture 21)
