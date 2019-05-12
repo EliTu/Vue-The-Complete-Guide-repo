@@ -10,19 +10,14 @@
 
 <body>
     <div id="app">
-        <h1 v-once>{{ title }}</h1>
-        <p>{{ sayHello() }} - <a v-bind:href="link">Google</a></p>
+        <!-- <button @click="increase">Increase counter1</button>
+        <button @click="decrease">decrease counter1</button> -->
+        <button @click="counter1++">Increase counter1</button>
+        <button @click="counter1--">Increase counter1</button>
         <hr>
-        <p v-html="finishedLink"></p>
-        <hr>
-        <button type="button" @click="increase(2, $event)">Click</button>
-        <button type="button" @click="counter++">Click</button>
-        <p>{{ `${counter} ${counter * 2 > 10 ? 'Greater than 10' : 'Smaller than 10'}` }}</p>
-        <p @mousemove="getCoordinates">Coordinates: {{ x }} | {{ y }}
-            <span @mousemove.stop=""> (( DEAD ZONE ))</span>
-        </p>
-        <hr>
-        <input type="text" @keyup.enter.space.delete="alertMe">
+        <button @click="counter2++">Increase counter2</button>
+        <p>Counter: {{ counter1 }} | {{ counter2 }}</p>
+        <p>Result: {{ result() }} | {{ output }}</p>
     </div>
 
     <script src="./vue.js"></script>
@@ -30,29 +25,28 @@
         new Vue({
             el: '#app',
             data: {
-                title: 'Hi Vue!!',
-                bool: true,
-                link: 'http://google.com',
-                finishedLink: '<a href="http://google.com">Google</a>',
-                counter: 0,
-                x: 0,
-                y: 0
+                counter1: 0,
+                counter2: 0,
+                // result: ''
+            },
+            computed: {
+                output() {
+                    console.log('Computed');
+                    return this.counter1 > 5 ? 'Greater than 5' : 'smaller than 5';
+                }
             },
             methods: {
-                sayHello() {
-                    this.title = 'Hello';
-                    return this.title;
-                },
-                increase(step, e) {
-                    console.log(e);
-                    this.counter += step;
-                },
-                getCoordinates(e) {
-                    this.x = e.clientX;
-                    this.y = e.clientY;
-                },
-                alertMe() {
-                    alert('Alert');
+                // increase() {
+                //     this.counter1++;
+                //     this.result = this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+                // },
+                // decrease() {
+                //     this.counter1--;
+                //     this.result = this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+                // }
+                result() {
+                    console.log('Method');
+                    return this.counter1 > 5 ? 'Greater than 5' : 'smaller than 5';
                 }
             }
         });

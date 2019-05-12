@@ -433,3 +433,35 @@ For example we would duplicate the click button and pass few JavaScript expressi
 ```
 
 Earlier we called a method to increment the counter, but we can also do that by passing `counter++`, which will increment the value of `counter` by one upon each click. In the interpolation we could pass expressions like template strings, and within pass ternary operators, and arithmetic operators (that would eventually override the increment expression we passed in the event listener).
+
+## Using Two-Way-Binding - `v-model` (Section 2, lecture 23)
+
+Another feature available for us to manipulate data within the template is the `v-model` directive, which basically allows us the set and get data at the same time. We saw how we could output data by passing the properties of the `data` object in the string interpolation, and saw how we could listen and set data with the `v-on` directive, but with `v-model` we could do both in the same time, which is the two-way data binding concept.
+
+In our example, we have an input field and an empty `data` property named `name`, we could populate the input field with value, and at the same time set that value to whatever we pass in the input field. We do this by passing `v-model` in the `<input>`, and as a value passing whatever property we want to bind the input field to.
+
+```js
+ <input type="text" v-model="name">
+<p>{{ name }}</p>
+
+ new Vue({
+            el: '#app',
+            data: {
+                name: ''
+            },
+        });
+```
+
+Now whatever we pass in the input field will be set as the value of `name`, and we could confirm this by looking at the Vue dev tools. Of course, it will also work the other way around, as if we manually set the value of `name` to some string, it will be present within the text field upon the page load.
+
+Basically it is a syntactic sugar for the following code:
+
+```js
+<input
+   v-bind:value="something"
+   v-on:input="something = $event.target.value">
+```
+
+`v-model` directive simplifies our code and make it easy to listen and set values for properties.
+
+## Reacting to Changes With Computed Properties (Section 2, lecture 24)
