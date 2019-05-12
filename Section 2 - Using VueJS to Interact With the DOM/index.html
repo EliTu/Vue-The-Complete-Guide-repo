@@ -27,25 +27,23 @@
             data: {
                 counter1: 0,
                 counter2: 0,
-                // result: ''
             },
             computed: {
                 output() {
-                    console.log('Computed');
                     return this.counter1 > 5 ? 'Greater than 5' : 'smaller than 5';
                 }
             },
+            watch: {
+                counter1(value) {
+                    // let vm = this; // In case not an arrow function
+                    console.log(value);
+                    setTimeout(() => {
+                        this.counter1 = 0;
+                    }, 2000);
+                }
+            },
             methods: {
-                // increase() {
-                //     this.counter1++;
-                //     this.result = this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
-                // },
-                // decrease() {
-                //     this.counter1--;
-                //     this.result = this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
-                // }
                 result() {
-                    console.log('Method');
                     return this.counter1 > 5 ? 'Greater than 5' : 'smaller than 5';
                 }
             }

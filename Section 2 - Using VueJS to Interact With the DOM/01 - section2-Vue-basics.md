@@ -683,4 +683,80 @@ When we press on the increase button of `counter1`, we see that both `Method` an
 
 The conclusion is that we should use `computed` properties if we have such dependencies, and we need to cache the result, not unnecessarily recalculate all the properties, and so we should take more advantage of the `computed` concept.
 
-## Reacting to Changes with Computed Properties (Section 2, lecture 25)
+## Reacting to Changes with Computed Properties - using `watch` object (Section 2, lecture 25)
+
+Vue has another Vue instance object that we should know well, and that is the `watch` object, that joins to the group of Vue objects we know by now. Basically, `watch` executes code when a certain property that it watches has changes made to him.
+
+With `computed` methods, we first set the property in `data` and then pass on the logic inside a method in the `computed` object, telling how the property should be computed. In `watch` it works kind of the other way around: as the property key, we set a name of an already included `data` property that we would like to watch - so if we want to watch `counter1`, we will pass it as the name of the key. We will then pass the `value` paramther, which is automatically passed into the function, and it cathes the current value of the property we're watching.
+
+```js
+new Vue({
+	el: '#app',
+	data: {
+		counter1: 0,
+		counter2: 0,
+	},
+	computed: {
+		output() {
+			return this.counter1 > 5 ? 'Greater than 5' : 'smaller than 5';
+		},
+	},
+	watch: {
+		counter1(value) {},
+	},
+	methods: {
+		result() {
+			return this.counter1 > 5 ? 'Greater than 5' : 'smaller than 5';
+		},
+	},
+});
+```
+
+### When to use `computed` and when to use `watch`
+
+At this point, we could set it to act as the `computed` method we set before, but it is the best practice to use `computed` methods to perform this kind of synchronous tasks whenever we can, since its more optimal to work this way. **Best use `watch` methods to work with asynchronous code, and that is because `computed` properties are only being ran synchronously,**, and so if we will need to get responses from the server, HTTP requests, use AJAX etc we should achieve this with a `watch` method.
+
+For this example we will use the `setTimeOut` function to reset the `counter1` value after 2 seconds.
+
+```js
+new Vue({
+	el: '#app',
+	data: {
+		counter1: 0,
+		counter2: 0,
+	},
+	computed: {
+		output() {
+			return this.counter1 > 5 ? 'Greater than 5' : 'smaller than 5';
+		},
+	},
+	watch: {
+		counter1(value) {
+			// let vm = this; // In case not an arrow function
+			console.log(value); // Returns the N clicks we made om the increment/decrement button.
+			setTimeout(() => {
+				this.counter1 = 0;
+			}, 2000);
+		},
+	},
+	methods: {
+		result() {
+			return this.counter1 > 5 ? 'Greater than 5' : 'smaller than 5';
+		},
+	},
+});
+```
+
+If we are running ES5 code, meaning we pass a normal anonymous function, we will have to set `this` to a variable so we will be able to use it, but since we're using ES6 arrow function, the value of `this` is being lexically passed, and so it will always refer to the Vue instance.
+
+Now we can hit the button to increment/decrement the counter value, and after 2 seconds it will be round back to 0. This happens because the `watch` method watches the `counter1` property, and upon a change fires a function that is being executed after 2 seconds. We're not retuning anything or setting any new values, but simply reacting to a change on an existing property we set before in the `data` object.
+
+## Saving Time with Shorthands (Section 2, lecture 26)
+
+As I've already used before, we can swap `v-bind:(attribute)` with `:(attribute)`, and `v-on:(event)` with `@(event)`
+
+## Exercise 3
+
+<!-- Check code in Exercise-3 folder  -->
+
+##
