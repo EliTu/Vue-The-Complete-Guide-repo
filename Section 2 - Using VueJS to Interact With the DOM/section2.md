@@ -465,3 +465,222 @@ Basically it is a syntactic sugar for the following code:
 `v-model` directive simplifies our code and make it easy to listen and set values for properties.
 
 ## Reacting to Changes With Computed Properties (Section 2, lecture 24)
+
+We'll go back to a previous example we've seen with the counter, we have a button and whenever we click on it we fire the callback function `increase` that simply increases the `counter1` by one, and outputs a result that says if the value of `counter1` is greater or smaller than 5, depends on the current amount of `counter1`
+
+```js
+    <div id="app">
+        <button @click="increase">Increase counter1</button>
+        <p>Counter: {{ counter1 }}</p>
+        <p>Result: {{ result }}</p>
+    </div>
+
+    <script src="./vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                counter1: 0
+                result: ''
+            },
+            methods: {
+                increase() {
+                    this.counter1++;
+                    this.result = this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+            }
+        });
+```
+
+That is a nice and very easy to maintain code, but it is very simple and in bigger applications we would have a much more verbose and complicated code that may not be so simple as this. If we will use a counter variable in many other places in the app and other properties may depend on it, so greater portions of the app would have to rely on the value of that property, it could quickly get very problematic to manage all of them with the `increase` method.
+
+It would already get harder to maintain if we for example add a decrease button that would simply do the reverse operation, we would have to create another method named `decrease` that would handle the reversed operation.
+
+```js
+    <div id="app">
+        <button @click="increase">Increase counter1</button>
+        <button @click="decrease">Decrease counter1</button>
+        <p>Counter: {{ counter1 }}</p>
+        <p>Result: {{ result }}</p>
+    </div>
+
+    <script src="./vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                counter1: 0
+                result: ''
+            },
+            methods: {
+                increase() {
+                    this.counter1++;
+                    this.result = this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+            },
+                decrease() {
+                    this.counter1--;
+                    this.result = this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+            }
+        });
+```
+
+### Fixing the code
+
+This works, but we have the same time of code in 2 different places, and if we will have some more things we need to do with `counter1`, it will quickly get very unmaintainable. Luckily for us, Vue makes it much easier to modal such cross-property code and dependencies. We'll get rid of both functions, and simply pass the increment and decrement operation for `counter1` in the event listener itself.
+
+We would also like to update our result like we had before. We can't set the logic for that in the `data` object by simply passing the ternary operator in the `result` property, `data` is not reactive in Vue.
+
+One way to do that is we could do that with a simple method that returns the result of `counter`. Then we call the `result` method in the template, get rid of the `result` property and now we have the same code execution like we had before.
+
+```js
+    <div id="app">
+        <button @click="counter1++">Increase counter1</button>
+        <button @click="counter1--">Decrease counter1</button>
+        <p>Counter: {{ counter1 }}</p>
+        <p>Result: {{ result() }}</p>
+    </div>
+
+    <script src="./vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                counter1: 0
+            },
+            methods: {
+                result() {
+                    return this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+                }
+            }
+        });
+```
+
+### The problem
+
+If we will add a third button, which will have `counter2` that is being incremented, the `result` method will still be executed upon each update of the page, as Vue does that automatically whenever one of the `data` properties changes, and doesn't know if the `result` function we call is using one of the properties we changed, basically doesn't know if the increment of `counter2` would influcence the `result` method, and so it re-call this method at any way.
+
+```js
+    <div id="app">
+        <button @click="counter1++">Increase counter1</button>
+        <button @click="counter1--">Decrease counter1</button>
+        <button @click="counter2++">Decrease counter2</button>
+        <p>Counter: {{ counter1 }}</p>
+        <p>Result: {{ result() }}</p>
+    </div>
+
+    <script src="./vue.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                counter1: 0,
+                counter2: 0
+            },
+            methods: {
+                result() {
+                    return this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+                }
+            }
+        });
+```
+
+This is not a problem at this kind of simple app, but can get very CPU heavy for bigger apps that run a vast function that have many different operations, we won't want to execute it unnecessarily, but by default, the engine would do it anyway.
+
+### The solution: the `computed` object
+
+For this case we have a new object for the Vue instance objects, and that is the `computed` object. The `computed` object allows us to store properties, which will mostly be functions. For example, we would store a property named `output`, which will be a method, where we return the same thing the `result` method returns.
+
+```js
+new Vue({
+	el: '#app',
+	data: {
+		counter1: 0,
+		counter2: 0,
+	},
+	computed: {
+		output() {
+			return this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+		},
+	},
+	methods: {
+		result() {
+			return this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+		},
+	},
+});
+```
+
+It looks the same as the `result` method, but has a different name., **But it is being passed in a different way: we pass it like we would pass a property, basically without the parantheses**, we don't call it as a function, but use it like a property stored in the `data` object.
+
+```js
+<div id="app">
+        <button @click="counter1++">Increase counter1</button>
+        <button @click="counter1--">Decrease counter1</button>
+        <button @click="counter2++">Decrease counter2</button>
+        <p>Counter: {{ counter1 }}</p>
+        <p>Result: {{ result() }} | {{ output }}</p>
+</div>
+
+<script src="./vue.js"></script>
+<script>
+
+new Vue({
+	el: '#app',
+	data: {
+		counter1: 0,
+		counter2: 0,
+	},
+	computed: {
+		output() {
+			return this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+		},
+	},
+	methods: {
+		result() {
+			return this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+		},
+	},
+});
+```
+
+Upon reloading of the page, we would see the string that being returned from `result` and `output` is side by side and it updates dynamically upon clicking on increment or decrement of `counter1`. The difference behind the scenes now is, the `result` function is being called every time, upon changing `counter1` or `counter2`, because it doesn't take into account which properties are being passed within the function and which should change, but a `computed` property, `output` method, does analyze the code and does take into account what should be updated, and thus won't run if we will hit the increment button om `counter2`.
+
+We can prove this if we will pass some `console.log` into both of the methods, to see what is being printed when we press on the buttons. We will also add `counter2` to the template to see its result.
+
+```js
+<div id="app">
+        <button @click="counter1++">Increase counter1</button>
+        <button @click="counter1--">Decrease counter1</button>
+        <button @click="counter2++">Decrease counter2</button>
+        <p>Counter: {{ counter1 }} | {{ counter2 }}</p>
+        <p>Result: {{ result() }} | {{ output }}</p>
+</div>
+
+<script src="./vue.js"></script>
+<script>
+
+new Vue({
+	el: '#app',
+	data: {
+		counter1: 0,
+		counter2: 0,
+	},
+	computed: {
+		output() {
+			console.log('Computed!');
+			return this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+		},
+	},
+	methods: {
+		result() {
+			console.log('Method!');
+			return this.counter1 > 5 ? 'Greater than 5' : 'Smaller than 5';
+		},
+	},
+});
+```
+
+When we press on the increase button of `counter1`, we see that both `Method` and `Computed` are being printed to the console, meaning both are being executed, and this makes sense because the `counter1` changes and it affects both of the functions. If we will incrase `counter2`, a value that is not being passed in the `output` method, we only see `Method!` being loged, meaning that only `result` was executed and `computed` didn't. This makes sense because `output` function, as a `computed` method, does take into account what values and properties exist inside of it, and then will only be executed if there is a change in these properties.
+
+The conclusion is that we should use `computed` properties if we have such dependencies, and we need to cache the result, not unnecessarily recalculate all the properties, and so we should take more advantage of the `computed` concept.
+
+## Reacting to Changes with Computed Properties (Section 2, lecture 25)
