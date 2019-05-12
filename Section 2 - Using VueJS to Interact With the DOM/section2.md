@@ -416,3 +416,20 @@ Now the alert will pop up upon pressing enter, space and the delete button.
 ## Exercise 2
 
 <!-- See Exercise2 folder -->
+
+## Writing JavaScript Code in Templates (Section 2, lecture 22)
+
+When passing JavaScript expressions and properties in the template, in the interpolation or the Vue attribute values, we could also pass whole JavaScript expressions right inside the template, within the interpolation or within the quotation marks, and don't need to output a single value or a method.
+
+Basically in every place where we access the Vue instance, we could write any valid JavaScript code, as long as it only has one expression, and doesn't contain any complex expression like `if` statement, `for` loop etc. So statements like a simple arrow function, ternary operator, simple arithmetic calculations etc can be passed within the interpolation of the Vue instacne in the template, and very simple arithmetic calculations could be passed withim the attribute value of the directive.
+
+For example we would duplicate the click button and pass few JavaScript expressions right within the Template, instead of passing properties and methods.
+
+```js
+<button type="button" @click="increase(2, $event)">Click</button>
+
+<button type="button" @click="counter++">Click</button>
+<p>{{ `${counter} ${counter * 2 > 10 ? 'Greater than 10' : 'Smaller than 10'}` }}</p>
+```
+
+Earlier we called a method to increment the counter, but we can also do that by passing `counter++`, which will increment the value of `counter` by one upon each click. In the interpolation we could pass expressions like template strings, and within pass ternary operators, and arithmetic operators (that would eventually override the increment expression we passed in the event listener).

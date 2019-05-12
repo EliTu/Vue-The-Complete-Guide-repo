@@ -16,7 +16,8 @@
         <p v-html="finishedLink"></p>
         <hr>
         <button type="button" @click="increase(2, $event)">Click</button>
-        <p>{{ counter }}</p>
+        <button type="button" @click="counter++">Click</button>
+        <p>{{ `${counter} ${counter * 2 > 10 ? 'Greater than 10' : 'Smaller than 10'}` }}</p>
         <p @mousemove="getCoordinates">Coordinates: {{ x }} | {{ y }}
             <span @mousemove.stop=""> (( DEAD ZONE ))</span>
         </p>
