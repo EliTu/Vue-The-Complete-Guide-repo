@@ -256,3 +256,17 @@ Let's say we would also would like to be able to control the `width` value of a 
 ```
 
 Now by adjusting the values in both of the input fields, we can dynamically change the styles, the background color and width, of the `<div>` that are binded.
+
+## Styling Elements with Array Syntax (Section 2, lecture 31)
+
+As before, we can also use the array syntax, [], to pass multiple style options, like we've seen before.
+
+```js
+   <div class="demo" :style="{backgroundColor: color}"></div>
+   <div class="demo" :style="myStyle"></div>
+   <div class="demo" :style="[myStyle, {height: `${width}px`}]"></div>
+```
+
+On a different important note: If we will use style binding like this, Vue will automatically prefix ours styles to allow the code to be supported on all browseers that also support Vue.
+
+## Assignment 4
