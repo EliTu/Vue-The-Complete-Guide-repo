@@ -758,5 +758,3 @@ As I've already used before, we can swap `v-bind:(attribute)` with `:(attribute)
 ## Exercise 3
 
 <!-- Check code in Exercise-3 folder  -->
-
-##

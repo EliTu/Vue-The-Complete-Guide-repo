@@ -10,14 +10,9 @@
 
 <body>
     <div id="app">
-        <!-- <button @click="increase">Increase counter1</button>
-        <button @click="decrease">decrease counter1</button> -->
-        <button @click="counter1++">Increase counter1</button>
-        <button @click="counter1--">Increase counter1</button>
-        <hr>
-        <button @click="counter2++">Increase counter2</button>
-        <p>Counter: {{ counter1 }} | {{ counter2 }}</p>
-        <p>Result: {{ result() }} | {{ output }}</p>
+        <div class="demo" @click="attachRed = !attachRed" :class="divClasses">1</div>
+        <div class="demo">2</div>
+        <div class="demo">3</div>
     </div>
 
     <script src="./vue.js"></script>
@@ -25,30 +20,51 @@
         new Vue({
             el: '#app',
             data: {
-                counter1: 0,
-                counter2: 0,
+                attachRed: false,
             },
             computed: {
-                output() {
-                    return this.counter1 > 5 ? 'Greater than 5' : 'smaller than 5';
-                }
-            },
-            watch: {
-                counter1(value) {
-                    // let vm = this; // In case not an arrow function
-                    console.log(value);
-                    setTimeout(() => {
-                        this.counter1 = 0;
-                    }, 2000);
-                }
-            },
-            methods: {
-                result() {
-                    return this.counter1 > 5 ? 'Greater than 5' : 'smaller than 5';
+                divClasses() {
+                    return {
+                        orangered: this.attachRed,
+                        springgreen: !this.attachRed
+                    }
                 }
             }
         });
     </script>
+
+    <style>
+        #app {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .demo {
+            font-size: 2rem;
+            color: #494340da;
+            display: flex;
+            justify-content: center;
+            justify-items: center;
+            margin: 1rem;
+            width: 11rem;
+            height: 11rem;
+            border: 2px solid #6666;
+        }
+
+        .orangered {
+            background-color: orangered;
+        }
+
+        .springgreen {
+            background-color: springgreen;
+        }
+
+        .royalblue {
+            background-color: royalblue;
+        }
+    </style>
 </body>
 
 </html>
