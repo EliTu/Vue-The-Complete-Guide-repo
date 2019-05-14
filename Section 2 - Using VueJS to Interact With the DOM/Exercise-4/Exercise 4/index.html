@@ -9,39 +9,182 @@
 </head>
 
 <body>
+
   <div id="exercise">
     <!-- 1) Start the Effect with the Button. The Effect should alternate the "highlight" or "shrink" class on each new setInterval tick (attach respective class to the div with id "effect" below) -->
     <div>
-      <button @click="startEffect">Start Effect</button>
-      <div id="effect"></div>
+      <button @click="startEffect()">Start Effect</button>
+      <div id="effect" :class="alternatingEffects"></div>
     </div>
+    <hr>
+
     <!-- 2) Create a couple of CSS classes and attach them via the array syntax -->
-    <div>I got no class :(</div>
+    <div @mouseover="mouseOverEffect" :class="[basicClass,{hasContent: attach}, scaleEffect]">I got
+      no class :(
+    </div>
+    <hr>
+
     <!-- 3) Let the user enter a class (create some example classes) and attach it -->
     <div>
-      <input type="text">
-      <div></div>
+      <input type="text" v-model="box">
+      <div :class="box"></div>
     </div>
+    <hr>
+
     <!-- 4) Let the user enter a class and enter true/ false for another class (create some example classes) and attach the classes -->
     <div>
-      <input type="text">
-      <input type="text">
-      <div></div>
+      <input type="text" v-model="userBool" placeholder="Enter any key to attach a class">
+      <input type="text" v-model="anotherBox" placeholder="Please pass a valid class name">
+      <div :class="[anotherBox, {hasContent: userBool}]"></div>
     </div>
+    <hr>
+
     <!-- 5) Repeat 3) but now with values for styles (instead of class names). Attach the respective styles.  -->
     <div>
-      <input type="text">
-      <div></div>
+      <input type="text" v-model="input" placeholder="Pass on an HTML color name">
+      <div :style="[computedStyle, {backgroundColor: input}, {border: border}]"></div>
     </div>
+    <hr>
+
+
     <!-- 6) Create a simple progress bar with setInterval and style bindings. Start it by hitting the below button. -->
     <div>
-      <button>Start Progress</button>
-      <div></div>
+      <button @click="startProgress()">Start Progress</button>
+      <div :style="[progressBar, {width: `${barWidth}px`},{growBar: lunchBar}]"></div>
     </div>
   </div>
 
-  <script src="https://npmcdn.com/vue/dist/vue.js"></script>
-  <script></script>
+  <style>
+    #effect {
+      width: 100px;
+      height: 100px;
+      border: 1px solid black;
+    }
+
+    .highlight {
+      background-color: red;
+      width: 200px !important;
+    }
+
+    .shrink {
+      background-color: gray;
+      width: 50px !important;
+    }
+
+    .scale {
+      transform: scale(1.3);
+    }
+
+    .hasContent::after {
+      content: ' I got a class 😁!';
+      background-color: rgba(240, 230, 38, 0.726);
+    }
+
+    .properDiv {
+      width: 50%;
+      margin: 0 auto;
+      padding: 0.5rem, 1rem;
+      border: 2px solid indigo;
+      font-size: 2rem;
+      box-shadow: 2px, 1px, 3px, rgba(65, 63, 27, 0.5);
+    }
+
+    .box {
+      margin: 0 auto;
+      width: 150px;
+      height: 150px;
+      background-color: crimson;
+      border: 1px solid ridge;
+    }
+
+    .anotherBox {
+      margin: 0 auto;
+      width: 150px;
+      height: 150px;
+      background-color: navy;
+      border: 2px solid dotted;
+    }
+  </style>
+
+  <script src=" https://npmcdn.com/vue/dist/vue.js"> </script>
+  <script>
+    new Vue({
+      el: '#exercise',
+      data: {
+        effectBool: false,
+        attach: false,
+        userBool: '',
+        basicClass: 'properDiv',
+        scaleEffect: 'scale',
+        box: 'box',
+        anotherBox: 'anotherBox',
+        basicBox: 'basicBox',
+        customStyle: {
+          color: 'rgba(100, 100, 250, 0.7)',
+          width: 10,
+          height: 10
+        },
+        input: '',
+        border: '3px dotted blue',
+        lunchBar: false,
+        progressBar: {
+          height: `${50}px`,
+          background: 'orangered'
+        },
+        barWidth: 10
+      },
+      methods: {
+        startEffect: function () {
+          setInterval(() => {
+            this.effectBool = !this.effectBool;
+          }, 1000);
+        },
+        mouseOverEffect() {
+          this.attach = !this.attach;
+        },
+        startProgress() {
+          this.lunchBar = true;
+        }
+      },
+      computed: {
+        alternatingEffects() {
+          return {
+            highlight: this.effectBool,
+            shrink: !this.effectBool
+          }
+        },
+        computedStyle() {
+          return {
+            backgroundColor: this.customStyle.color,
+            width: `${this.customStyle.width}rem`,
+            height: `${this.customStyle.height}rem`,
+            margin: '0 auto'
+          }
+        },
+        anotherComputedStyle() {
+          return {
+            backgroundColor: this.customStyle.color,
+            width: `${this.customStyle.width}rem`,
+            height: `${this.customStyle.height}rem`,
+            margin: '0 auto'
+          }
+        },
+        growBar() {
+          setInterval(() => {
+            // Functionality
+            if (this.barWidth < 500)
+              this.barWidth += 5;
+
+            // Coloring
+            this.barWidth < 200 ? this.progressBar.background = 'orangered' :
+              this.barWidth >= 200 && this.barWidth <= 300 ? this.progressBar.background = 'goldenrod' :
+              this.barWidth >= 300 && this.barWidth <= 490 ? this.progressBar.background = 'yellow' :
+              this.progressBar.background = 'lime'
+          }, 40);
+        }
+      },
+    });
+  </script>
 </body>
 
 </html>
