@@ -135,7 +135,7 @@ When we don't want to detach the element completely, we should of course use `v-
 
 Another point to make is that `v-show` doesn't work with `<template>`, and so if we work with that HTML5 element, we should only use `v-if`, and if we need to nest few elements and use `v-show` on them, we should use `<div>`.
 
-## Rendering Lists with `v-for` (Section 3, lecture 38)
+## Rendering Lists with `v-for` (Section 3, lecture 39)
 
 In case we want to output lists fast, we could do this in no time with `v-for` directive, which is a built in Vue loop that can easily loop though an array and output all its elements to the DOM, usually inside a list element like `<ul>` or `<ol>`, on a `<li>` element, which will replicate each array element in its own `<li>` tag.
 
@@ -157,10 +157,27 @@ The syntax is `v-for="(current element) in (target iterable)"`, basically choosi
  			data: {
  				ingredients: ['meat', 'fruit', 'cookies'],
  			},
- 		});
+         });
+    </script>
+    // Output:
+    //  meat
+    // fruit
+    // cookies
 ```
 
 The output would be a `<ul>` with 3 `<li>`tags, displaying the ingredients one by one.
 
-## Getting The Current Index (Section 3, lecture 39)
+## Getting The Current Index (Section 3, lecture 40)
+
+What if we want to display the current index of each array element and display it in the list near each of the items? We could also do that in the `v-for` directive syntax. For this we will have to wrap our current element in parantheses, pass a coma and add a variable name that will represent the index in the loop, usually `i` or `index`. Then we could simply pass the `i` in our interpolation, which in turn will give us the index number of each element in the looped array.
+
+```js
+<li v-for="(ingredient, i) in ingredients">{{ ingredient }} ({{ i }})</li>
+// Output:
+// meat (0)
+// fruit (1)
+// cookies (2)
+```
+
+## Using an Alternative `v-for` Syntax with `<template>` (Section 3, lecture 41)
 

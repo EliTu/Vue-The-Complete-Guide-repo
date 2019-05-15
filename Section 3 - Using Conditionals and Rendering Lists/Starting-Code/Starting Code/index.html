@@ -12,7 +12,13 @@
 
  	<div id="app">
  		<ul>
- 			<li v-for="ingredient in ingredients">{{ ingredient }}</li>
+ 			<li v-for="(ingredient, i) in ingredients">{{ ingredient }} ({{ i }})</li>
+
+ 			<template v-for="(ingredient, i) in ingredients">
+ 				<h2>{{ ingredient }}</h2>
+ 				<p> {{ i }} </p>
+ 			</template>
+
  			<li v-for="person in persons">{{ person.name }}, {{ person.age }}, {{ person.color }}</li>
  		</ul>
  	</div>
