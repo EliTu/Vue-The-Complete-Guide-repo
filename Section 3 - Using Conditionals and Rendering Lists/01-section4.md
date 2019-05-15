@@ -121,3 +121,19 @@ Inside the `<template>` we can wrap multiple elements, and so a `<template>` is 
 
 ## Don't Detach it with `v-show` (Section 3, lecture 38)
 
+We saw that the `v-if` directive hides and shows elements on the page by detaching and attaching them from the DOM. There is another directive with a rather similar functionality on the surface, and that is `v-show`. This directive also takes a boolean value or property, and in case of `false`, will hide the element and his children from the page, only this time it won't remove it from the DOM completely, but simply set `display: none` style to that element, but they will still be available at the DOM.
+
+```js
+    <p v-show="show">Do you also see me?<span>Extra</span></p>
+```
+
+Upon clicking on the button, the element will dissapear from the UI. By inspecting the elements, we see that it has a `style= "display: none"` style that is being attached to it. By pressing on the button again, that property will dissapear and we will see the element again.
+
+### Use `v-if` or `v-show` ? 
+
+When we don't want to detach the element completely, we should of course use `v-show`, to hide the element but not removing it completely. Using `v-if` would lead to a better performance, since it removes elements from the page, thus allocating more memory since there are less elements in the DOM, and so this should be the default.
+
+Another point to make is that `v-show` doesn't work with `<template>`, and so if we work with that HTML5 element, we should only use `v-if`, and if we need to nest few elements and use `v-show` on them, we should use `<div>`.
+
+## Rendering Lists with `v-for` (Section 3, lecture 38)
+
