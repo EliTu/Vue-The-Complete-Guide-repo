@@ -137,3 +137,30 @@ Another point to make is that `v-show` doesn't work with `<template>`, and so if
 
 ## Rendering Lists with `v-for` (Section 3, lecture 38)
 
+In case we want to output lists fast, we could do this in no time with `v-for` directive, which is a built in Vue loop that can easily loop though an array and output all its elements to the DOM, usually inside a list element like `<ul>` or `<ol>`, on a `<li>` element, which will replicate each array element in its own `<li>` tag.
+
+The syntax is `v-for="(current element) in (target iterable)"`, basically choosing a name to represent the items in the iterable object (usually an array).
+
+ In our example we have an array of ingredients, if we would like to loop through it and output an `<ul>` with each array element in its own `<li>` tag, we will first create a `<ul>` in the template, pass one `<li>` and then use the `v-for` inside the `<li>`. Then we could simply pass `ingredient`, which represent the current array element into interpolation, in order for us to display it.
+
+```js
+    <div id="app">
+ 		<ul>
+ 			<li v-for="ingredient in ingredients">{{ ingredient }}</li>
+ 		</ul>
+ 	</div>
+
+ 	<script src=" https://unpkg.com/vue/dist/vue.js"> </script>
+ 	<script>
+ 		new Vue({
+ 			el: '#app',
+ 			data: {
+ 				ingredients: ['meat', 'fruit', 'cookies'],
+ 			},
+ 		});
+```
+
+The output would be a `<ul>` with 3 `<li>`tags, displaying the ingredients one by one.
+
+## Getting The Current Index (Section 3, lecture 39)
+

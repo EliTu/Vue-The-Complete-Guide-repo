@@ -11,16 +11,10 @@
  <body>
 
  	<div id="app">
- 		<p v-if="show">You can see me! <span> Extra nested</span></p>
- 		<p v-else>Now you see me!</p>
-
- 		<template v-if="show">
- 			<p>Lorem ipsum dolor sit amet.</p>
- 		</template>
-
- 		<p v-show="show">Do you also see me?<span>Extra</span></p>
-
- 		<button @click="showMe()">Vanish</button>
+ 		<ul>
+ 			<li v-for="ingredient in ingredients">{{ ingredient }}</li>
+ 			<li v-for="person in persons">{{ person.name }}, {{ person.age }}, {{ person.color }}</li>
+ 		</ul>
  	</div>
 
  	<script src=" https://unpkg.com/vue/dist/vue.js"> </script>
@@ -28,12 +22,18 @@
  		new Vue({
  			el: '#app',
  			data: {
- 				show: true
- 			},
- 			methods: {
- 				showMe() {
- 					this.show = !this.show;
- 				}
+ 				ingredients: ['meat', 'fruit', 'cookies'],
+ 				persons: [{
+ 						name: 'Max',
+ 						age: 27,
+ 						color: 'red'
+ 					},
+ 					{
+ 						name: 'Anna',
+ 						age: 'unknown',
+ 						color: 'blue'
+ 					}
+ 				]
  			},
  		});
  	</script>
