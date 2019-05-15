@@ -90,4 +90,34 @@ Important thing to note is that by passing `v-if` on a certain element, all the 
 
 If you're using Vue.js version 2.1 or higher, you now actually have access to a v-else-if  directive. Have a look at this link to learn more: https://vuejs.org/v2/guide/conditional.html#v-else-if.
 
-## Using an Aletrnative `v-if` Syntax (Section 3, lecture 37)
+## Using an Alternative `v-if` Syntax with `<template>` (Section 3, lecture 37)
+
+We can set up an alternative to attach or remove using the HTML5 `<template>` tag. This tag doesn't get rendered in the DOM, meaning it's like a placeholder element, but whatever we will pass inside will be rendered to the DOM.
+
+```js
+    <div id="app">
+ 		<p v-if="show">You can see me! <span> Extra nested</span></p>
+ 		<p v-else>Now you see me!</p>
+
+ 		<template>
+ 			<p>Lorem ipsum dolor sit amet.</p>
+ 		</template>
+
+ 		<p>Do you also see me?</p>
+
+ 		<button @click="showMe()">Vanish</button>
+ 	</div>
+```
+
+If we inspect the elements on our page, we won't see any wrapper around the `<p>` tag that is inested in the `<template>`. This is an alternative for creating `<div>` tags just to nest elements, and thus it can prevent clutter on the page. Moreover, we can easily attach `v-if` to the `<template>` tag, which will also allow us to toggle the content nested in the `<template>`.
+
+```js
+ 		<template v-if="show">
+ 			<p>Lorem ipsum dolor sit amet.</p>
+ 		</template>
+```
+
+Inside the `<template>` we can wrap multiple elements, and so a `<template>` is a suitable option to group or nest multiple elements we want to show or hide.
+
+## Don't Detach it with `v-show` (Section 3, lecture 38)
+
