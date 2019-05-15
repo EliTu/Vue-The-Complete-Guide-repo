@@ -181,3 +181,15 @@ What if we want to display the current index of each array element and display i
 
 ## Using an Alternative `v-for` Syntax with `<template>` (Section 3, lecture 41)
 
+Another way for us to use the `v-for` loop is by applying it on a `<template>` and then passing the element items to other elements, like `<p>` tags or `<h1>` etc. We can do just that with the `v-for` directive, if we will pass it onto a parent `<template>` tag, and then we could output the results in other various tags, for example - pass `ingredient` to a `<h2>` tag and the `i` to a `<p>` tag.
+
+```js
+    <template v-for="(ingredient, i) in ingredients">
+        <h2>{{ ingredient }}</h2>
+        <p> {{ i }} </p>
+    </template>
+```
+
+In turn we will receive a `<h2>` heading for each ingredient, followed by a `<p>` tag index figure underneath it. Like before, the `<template>` tag won't get rendered. This way we get multiple, non-nested elements to be working together with the loop and rendering its results.
+
+## Looping through Objects (Section 3, lecture 42)
