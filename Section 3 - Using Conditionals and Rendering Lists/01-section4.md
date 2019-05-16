@@ -193,3 +193,66 @@ Another way for us to use the `v-for` loop is by applying it on a `<template>` a
 In turn we will receive a `<h2>` heading for each ingredient, followed by a `<p>` tag index figure underneath it. Like before, the `<template>` tag won't get rendered. This way we get multiple, non-nested elements to be working together with the loop and rendering its results.
 
 ## Looping through Objects (Section 3, lecture 42)
+
+We can also loop through arrays that hold objects, and actually look through objects themselves, all of that using the options that the `v-for` directive provides us. For this example we will have an array that hold 2 persons objects, each one hold few properties about a person. 
+
+```js
+	new Vue({
+ 			el: '#app',
+ 			data: {
+ 				persons: [{
+ 						name: 'Max',
+ 						age: 27,
+ 						color: 'red'
+ 					},
+ 					{
+ 						name: 'Anna',
+ 						age: 'unknown',
+ 						color: 'blue'
+ 					}
+ 				]
+ 			},
+ 		});
+```
+
+We would like to output a `<ul>` that consists of all the properties of the objects, sorted by key-value pairs, and in the end output their index. First we will loop through the array to have an access to the objects, using `v-for`, getting each "person". For each one of the array elements, we could ouput its value like we would with any object, i.e `person.name`.
+
+```js
+	<ul>
+		<li v-for="person in persons"> {{ person.name }} </li>
+	</ul>
+```
+
+This in turn will output an unordered list of the names of our objects.
+
+### Looping through an object - getting the key-value pairs
+
+What if we don't want to manually access all the object properties and their values, but instead loop through through them and get them by a key-value pair format? We could do that with the `v-for` directive as well, basically nesting the loops.
+
+We can create a `<div>` inside of the `<li>` that holds the original loop, and then loop through that loop, or in other words - loop through `person`. What we would like to get from the object is the value, and so we will pass `value in person`. The `value` is just an arbitrary name that we pass (could be whatever we like, like `val` or `v` as well), but when looping through objects, the first argument will always refer to the value of the object, the order is important here. We can pass more arguments: the 2nd one will be key, and third one will be the index of the current iteration. Then we could use these arguments to display the results in the DOM.
+
+```js
+	<li v-for="person in persons">
+		<div v-for="(value, key, i) in person">{{ key }}: {{ value }} ({{ i }})</div>
+	</li>
+
+// name: Max (0)
+// age: 27 (1)
+// color: red (2)
+
+// name: Anna (0)
+// age: unknown (1)
+// color: blue (2)
+```
+
+## Looping through a List of Numbers (Section 3, lecture 42)
+
+If we only want to output a list of numbers, we could do that easily using the `v-for` directive. We simply pass `n in (number)`, where `n` is just a name we choose to represent a single number, and `(number)` is an arbitrary number we pass in, and we will get a list of all the numbers from 1 to that number.
+
+```js
+<span v-for="n in 10"> {{ n }} </span>
+// 1 2 3 4 5 6 7 8 9 10
+```
+
+## Keeping Track of Elements when using `v-for` (Section 3, lecture 44)
+

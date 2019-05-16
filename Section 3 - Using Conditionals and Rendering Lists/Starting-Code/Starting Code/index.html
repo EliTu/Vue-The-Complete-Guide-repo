@@ -12,15 +12,22 @@
 
  	<div id="app">
  		<ul>
- 			<li v-for="(ingredient, i) in ingredients">{{ ingredient }} ({{ i }})</li>
-
- 			<template v-for="(ingredient, i) in ingredients">
- 				<h2>{{ ingredient }}</h2>
- 				<p> {{ i }} </p>
- 			</template>
-
- 			<li v-for="person in persons">{{ person.name }}, {{ person.age }}, {{ person.color }}</li>
+ 			<li v-for="(ingredient, i) in ingredients" :key="ingredient">{{ ingredient }} ({{ i }})</li>
  		</ul>
+ 		<button @click="ingredients.push('Spices')">Add ingredient</button>
+
+ 		<template v-for="(ingredient, i) in ingredients">
+ 			<h2>{{ ingredient }}</h2>
+ 			<p> {{ i }} </p>
+ 		</template>
+
+ 		<ul>
+ 			<li v-for="person in persons">
+ 				<div v-for="(value, key, i) in person">{{ key }}: {{ value }} ({{ i }})</div>
+ 			</li>
+ 		</ul>
+ 		<span v-for="n in 10"> {{ n }} </span>
+
  	</div>
 
  	<script src=" https://unpkg.com/vue/dist/vue.js"> </script>
