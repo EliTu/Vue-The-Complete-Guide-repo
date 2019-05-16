@@ -256,3 +256,29 @@ If we only want to output a list of numbers, we could do that easily using the `
 
 ## Keeping Track of Elements when using `v-for` (Section 3, lecture 44)
 
+There are some things we need to keep in mind when we work with the `v-for` loops in Vue, understand what happens behind the scenes. For our example, we will create a button that upon a click will push a new element to the ingredients array we used earlier.
+
+```js
+	<ul>
+		<li v-for="(ingredient, i) in ingredients">{{ ingredient }} ({{ i }})</li>
+	</ul>
+	<button @click="ingredients.push('Spices')">Add ingredient</button>
+```
+
+We push the button and add a new element to the array with no problem. There are 2 things to notice here:
+
+- Vue proxies the `push` method, since it does not create a new array , but just adds a new item to an existing array. This is a bit hard to track because the array doesn't change. Array is an object, and so it has a reference type, the reference does not change but only a value in the memory, and so Vue looks at that and that is what we expect to happen.
+- Vue knows about the change and knows how to update the list by updating the position in the array where something has changed. If we were to override an element, it would indeed update that second element. It does not keep track of the 2nd element created and passed into the array, but only of the position, which is often the behavior we want, but if we want Vue to be actually aware of the list item, and not only its position, we will also have to pass a unique `key` value to each item, which will act as some sort of "ID" that Vue could have as a reference when looking for the item.
+
+### Assigning a `key` using `v-bind`
+
+To assign that key to each element in the array, we could use `v-bind`, or simply `:` and bind `key` to some sort of value which will be unique to each element. What can we pass as a unique key? We might think we could pass the index, but we shouldn't do that because the index is derived from the list itself and set dynamically when rendering the list. In our case, if we know for example that each ingredient would be in the list just once, we could pass the whole ingredient as the key. In a real app, we would use a real unique key for each item.
+
+```js
+	<ul>
+		<li v-for="(ingredient, i) in ingredients" :key="ingredient">{{ ingredient }} ({{ i }})</li>
+	</ul>
+	<button @click="ingredients.push('Spices')">Add ingredient</button>
+```
+
+When we re-render the list, it looks just the same, but behind the scenes Vue not only stores the position of each element and keep track of that position, but now also stores a unique ID for each element in the array.
