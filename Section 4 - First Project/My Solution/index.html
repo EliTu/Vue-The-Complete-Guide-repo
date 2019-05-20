@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Monster Slayer</title>
+		<script src="https://npmcdn.com/vue/dist/vue.js"></script>
+		<link rel="stylesheet" href="css/foundation.min.css" />
+		<link rel="stylesheet" href="css/app.css" />
+	</head>
+
+	<body>
+		<div id="app">
+			<section class="row">
+				<div class="small-6 columns">
+					<h1 class="text-center">YOU</h1>
+					<div class="healthbar">
+						<div
+							class="healthbar text-center"
+							style="margin: 0; color: white; background-color: green"
+							:style="{width: `${players[0].healthBarState}%`}"
+						>
+							<span class="health-stat">{{
+								players[0].healthBarState
+							}}</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="small-6 columns">
+					<h1 class="text-center">MONSTER</h1>
+					<div class="healthbar">
+						<div
+							class="healthbar text-center"
+							style="margin: 0; color: white; background-color: green"
+							:style="{width: `${players[1].healthBarState}%`}"
+						>
+							<span class="health-stat">{{
+								players[1].healthBarState
+							}}</span>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="row controls">
+				<div class="small-12 columns">
+					<button id="start-game" @click="gameInit()">
+						START NEW GAME
+					</button>
+				</div>
+			</section>
+
+			<section class="row controls" v-if="gameStart">
+				<div class="small-12 columns">
+					<button id="attack" v-if="isPlayersTurn" @click="attack()">
+						ATTACK
+					</button>
+					<button
+						id="special-attack"
+						v-if="isPlayersTurn && specialAttackCounter > 0"
+						@click="special()"
+					>
+						SPECIAL ATTACK<span> ({{ specialAttackCounter }})</span>
+					</button>
+					<button
+						id="heal"
+						v-if="isPlayersTurn && healCounter > 0"
+						@click="heal()"
+					>
+						HEAL<span> ({{ healCounter }})</span>
+					</button>
+					<button id="give-up" @click="giveUp()">GIVE UP</button>
+				</div>
+			</section>
+
+			<section class="row log">
+				<div class="small-12 columns">
+					<ul>
+						<li v-if="gameOnMessage !== ''" :class="log">
+							{{ gameOnMessage }}
+						</li>
+						<li
+							v-if="gameStart && turn === 'player'"
+							:class="[log, playerTurn]"
+						>
+							{{ turnLog }}
+						</li>
+						<li
+							v-else-if="gameStart && turn==='monster'"
+							:class="[log, monsterTurn]"
+						>
+							{{ turnLog }}
+						</li>
+						<li v-else></li>
+						<li v-for="log in gameLog" class="game-log">
+							{{ log }}
+						</li>
+					</ul>
+				</div>
+			</section>
+		</div>
+
+		<script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+		<script>
+			Vue.config.productionTip = false;
+			new Vue({
+				el: '#app',
+				data: {
+					// Booleans
+					gameStart: false,
+					isPlayersTurn: false,
+					// Game components
+					players: [
+						{
+							name: 'player',
+							healthBarState: 0,
+						},
+						{
+							name: 'monster',
+							healthBarState: 0,
+						},
+					],
+					turn: '',
+					specialAttackCounter: 3,
+					healCounter: 3,
+					// Logs
+					gameOnMessage: '',
+					turnLog: '',
+					logCounter: 1,
+					gameLog: [],
+					// Styles
+					log: 'log',
+					playerTurn: 'player-turn',
+					monsterTurn: 'monster-turn',
+				},
+
+				methods: {
+					gameInit() {
+						// Set the 'gameStart' and 'setTurn' bool
+						this.gameStart = true;
+						// Set the turn
+						this.setTurn();
+						// Set health bar to 100% (Width 100%)
+						this.players[0].healthBarState = 100;
+						this.players[1].healthBarState = 100;
+						// Set special attack and heal counters:
+						this.specialAttackCounter = 3;
+						this.healCounter = 3;
+						// Clear battle log:
+						this.gameLog = [];
+						// Set gameOnMessage:
+						this.gameOnMessage = 'a new game has started, fight!';
+						// Clear gameOnMessage:
+						setInterval(() => {
+							this.gameOnMessage = '';
+						}, 7000);
+					},
+					setTurn() {
+						if (this.gameStart) {
+							// Switch the turn boolean:
+							this.isPlayersTurn = !this.isPlayersTurn;
+							// Set 'turn' property:
+							this.isPlayersTurn
+								? (this.turn = this.players[0].name)
+								: (this.turn = this.players[1].name);
+							// Set turn log:
+							this.turnLog = `It's The ${this.turn}'s turn!`;
+							this.setMonsterTurn;
+						}
+					},
+					attack() {
+						// Random dammage amount
+						const dammage = Math.floor(
+							Math.random() * (10 - 1 + 1) + 1
+						);
+						// Attack effect in the UI
+						this.isPlayersTurn
+							? (this.players[1].healthBarState =
+									this.players[1].healthBarState - dammage)
+							: (this.players[0].healthBarState =
+									this.players[0].healthBarState - dammage);
+
+						// If health bar < 0, set it to 0
+						this.adjustHealthBar;
+						// Output a log:
+						this.gameLog.unshift(
+							`Move ${this.logCounter++} - The ${
+								this.turn
+							} attacked ${
+								this.turn === 'player' ? 'monster' : 'player'
+							} for ${dammage} dammage!`
+						);
+						// Set the turn
+						// Check for win
+						this.gameWin;
+						this.setTurn();
+					},
+					special() {
+						if (this.specialAttackCounter > 0) {
+							// Random dammage amount:
+							const special = Math.floor(
+								Math.random() * (15 - 10 + 1) + 10
+							);
+							// Attack effect in the UI:
+							this.players[1].healthBarState =
+								this.players[1].healthBarState - special;
+							// Decrement the counter:
+							this.specialAttackCounter--;
+							// If health bar < 0, set it to 0
+							this.adjustHealthBar;
+							// Output a log:
+							this.gameLog.unshift(
+								`Move ${this.logCounter++} - The ${
+									this.turn
+								} used special attacked for ${special}
+								dammage!`
+							);
+							if (this.specialAttackCounter === 0)
+								this.gameLog.unshift(
+									`The ${
+										this.turn
+									} is out of special attack moves!`
+								);
+							// Check for win
+							this.gameWin;
+							// Set the turn
+							this.setTurn();
+						}
+					},
+					heal() {
+						if (
+							this.healCounter > 0 &&
+							this.players[0].healthBarState < 100
+						) {
+							// Random heal amount:
+							const heal = Math.floor(
+								Math.random() * (8 - 2 + 1) + 2
+							);
+							this.players[0].healthBarState =
+								this.players[0].healthBarState + heal;
+							// Decrement the counter:
+							this.healCounter--;
+							// If health bar < 0, set it to 0
+							this.adjustHealthBar;
+							// Output a log:
+							this.gameLog.unshift(
+								`Move ${this.logCounter++} - The ${
+									this.turn
+								} used heal and gained ${heal}
+								HP!`
+							);
+							if (this.healCounter === 0)
+								this.gameLog.unshift(
+									`The ${this.turn} is out of heal moves!`
+								);
+							// Check for win
+							this.gameWin;
+							// Set the turn
+							this.setTurn();
+						}
+					},
+					giveUp() {
+						// Set gameStart boolean into 'false' to turn off the game functionality:
+						this.gameStart = false;
+						// Set gameOnMessage to display forfeit message:
+						this.gameOnMessage =
+							'The player has forfieted, Game over!';
+						// Set players health bar to 0:
+						this.players[0].healthBarState = 0;
+					},
+				},
+				computed: {
+					adjustHealthBar() {
+						if (this.players[0].healthBarState < 0)
+							this.players[0].healthBarState = 0;
+						if (this.players[1].healthBarState < 0)
+							this.players[1].healthBarState = 0;
+					},
+					setMonsterTurn() {
+						// If monster's turn, attack player:
+						if (!this.isPlayersTurn) {
+							setTimeout(() => {
+								this.attack();
+							}, 1500);
+						}
+					},
+					gameWin() {
+						if (
+							this.players[0].healthBarState <= 0 ||
+							this.players[1].healthBarState <= 0
+						) {
+							// Set gameStart to false to turn off the game functionality:
+							this.gameStart = false;
+							// Set gameOnMessage to display victory message:
+							this.gameOnMessage = `The ${
+								this.turn
+							} has won the game after ${this.logCounter} moves!`;
+						}
+					},
+				},
+			});
+		</script>
+	</body>
+</html>
